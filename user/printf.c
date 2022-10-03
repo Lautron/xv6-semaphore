@@ -54,6 +54,13 @@ printint(int fd, int xx, int base, int sgn)
   }
 }
 
+int
+uint_to_str(char* str, int xx)
+{
+  int len = itoa(str, xx, 10, 0);
+  return len;
+}
+
 static void
 printptr(int fd, uint64 x) {
   int i;
