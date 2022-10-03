@@ -12,11 +12,10 @@ putc(int fd, char c)
   write(fd, &c, 1);
 }
 
-static void
-printint(int fd, int xx, int base, int sgn)
+static int
+itoa(char *buf, int xx, int base, int sgn)
 {
-  char buf[16];
-  int i, neg;
+  int len, neg;
   uint x;
 
   neg = 0;
@@ -27,15 +26,24 @@ printint(int fd, int xx, int base, int sgn)
     x = xx;
   }
 
-  i = 0;
+  len = 0;
   do{
-    buf[i++] = digits[x % base];
+    buf[len++] = digits[x % base];
   }while((x /= base) != 0);
-  if(neg)
-    buf[i++] = '-';
 
-  while(--i >= 0)
-    putc(fd, buf[i]);
+  if(neg)
+    buf[len++] = '-';
+
+  return len;
+}
+
+static void
+printint(int fd, int xx, int base, int sgn)
+{
+  char buf[16];
+  int len = itoa(buf, xx, base, sgn);
+  while(--len >= 0)
+    putc(fd, buf[len]);
 }
 
 static void
