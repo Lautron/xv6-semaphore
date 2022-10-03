@@ -15,7 +15,7 @@ putc(int fd, char c)
 static int
 itoa(char *buf, int xx, int base, int sgn)
 {
-  int len, neg;
+  int len, neg, temp;
   uint x;
 
   neg = 0;
@@ -34,6 +34,13 @@ itoa(char *buf, int xx, int base, int sgn)
   if(neg)
     buf[len++] = '-';
 
+  for (int i = 0; i < len/2; i++)  
+  {  
+    temp = buf[i];  
+    buf[i] = buf[len - i - 1];  
+    buf[len - i - 1] = temp;  
+  }
+
   return len;
 }
 
@@ -42,8 +49,9 @@ printint(int fd, int xx, int base, int sgn)
 {
   char buf[16];
   int len = itoa(buf, xx, base, sgn);
-  while(--len >= 0)
-    putc(fd, buf[len]);
+  for (int i = 0; i < len; ++i) {
+    putc(fd, buf[i]);
+  }
 }
 
 static void
